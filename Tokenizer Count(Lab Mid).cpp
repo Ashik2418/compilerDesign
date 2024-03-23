@@ -21,6 +21,31 @@ bool isKeyword(const string &word) {
 
     return keywordSet.find(word) != keywordSet.end();
 }
+void Tokenizer(const string &code,
+               vector<string> &keywords,
+               vector<string> &identifiers,
+               vector<string> &symbols,
+               vector<string> &operators) {
+               stringstream ss(code);
+               string word;
+               set<string> matching;
+
+    while (ss >> word) {
+        if (matching.insert(word).second) {
+            if (isKeyword(word)) {
+                keywords.push_back(word);
+            } else if (isIdentifier(word)) {
+                identifiers.push_back(word);
+            } else if (isSymbol(word)) {
+                symbols.push_back(word);
+            } else if (isOperator(word)) {
+                operators.push_back(word);
+            }
+        }
+    }
+}
+
+
 
 void Tokenizer(const string &code,
                int &identifierCount,
@@ -60,6 +85,7 @@ opti mise
     string code;
     cout << "Enter code: ";
     getline(cin, code);
+    cout<<code<<endl;
     stringstream ss(code);
     string word;
 
@@ -72,18 +98,41 @@ opti mise
     int integerCount = 0, floatCount = 0, exponentialCount = 0;
 
     Tokenizer(code, identifierCount, keywordCount, symbolCount, operatorCount, integerCount, floatCount, exponentialCount);
+     vector<string> keywords, identifiers, symbols, operators;
+    Tokenizer(code, keywords, identifiers, symbols, operators);
 
     // Print counts
+    cout<<endl;
      cout << "Token count: " << tokenCount << endl;
 
     cout << "Identifier: " << identifierCount << endl;
+    cout<<"Identifiers: ";
+    for (const string &word : identifiers) {
+        cout << word << " ";
+    }
+    cout << endl;
     cout << "Keyword: " << keywordCount << endl;
+    cout<< "Keywords: ";
+    for (const string &word : keywords) {
+        cout << word << " ";
+    }
+    cout << endl;
+
     cout << "Symbol: " << symbolCount << endl;
+    cout<<"Symbols: ";
+    for (const string &word : symbols) {
+        cout << word << " ";
+    }
+    cout << endl;
     cout << "Operator: " << operatorCount << endl;
+    cout << "Operators: ";
+    for (const string &word : operators) {
+        cout << word << " ";
+    }
+    cout<<endl;
     cout << "Integer: " << integerCount << endl;
     cout << "Float: " << floatCount << endl;
     cout << "Exponential: " << exponentialCount << endl;
-
     return 0;
 }
 
